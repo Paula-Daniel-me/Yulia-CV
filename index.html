@@ -1,3 +1,7 @@
+Конечно — вот улучшенная, более “презентабельная” версия: добавил **аккуратную рамку/обводку всего резюме**, усилил типографику и визуальную иерархию, сделал **мобильный вид** (фото сверху, удобные отступы, одна колонка, увеличенная читаемость). Имя фото оставил **`MyPhoto.JPG`**.
+
+Просто **замени содержимое `index.html`** этим кодом:
+
 ```html
 <!doctype html>
 <html lang="ru">
@@ -8,26 +12,29 @@
 
   <style>
     :root{
-      /* Палитра под тёплый бежевый фон фото */
-      --bg-0:#fbf6ee;
-      --bg-1:#f3e7d7;
+      /* База под тёплый беж фото */
+      --bg0:#fbf6ee;
+      --bg1:#f2e5d4;
 
-      --card:rgba(255,255,255,.68);
-      --stroke:rgba(255,255,255,.72);
+      --paper: rgba(255,255,255,.72);
+      --paper-strong: rgba(255,255,255,.82);
+      --stroke: rgba(255,255,255,.75);
 
       --text:#1f2937;
       --muted:#6b7280;
 
-      --accent-0:#a87a4b;  /* карамель */
-      --accent-1:#6b66e8;  /* холодный акцент */
-      --accent-2:#c04b6a;  /* ягодный */
+      --a0:#a87a4b;  /* карамель */
+      --a1:#6b66e8;  /* холодный акцент */
+      --a2:#c04b6a;  /* ягодный */
 
-      --shadow: 0 18px 45px rgba(31,41,55,.10);
-      --shadow-hover: 0 22px 60px rgba(31,41,55,.16);
+      --shadow: 0 18px 45px rgba(31,41,55,.12);
+      --shadow2: 0 26px 70px rgba(31,41,55,.18);
 
-      --radius-xl: 22px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
+      --r-xl: 26px;
+      --r-lg: 18px;
+      --r-md: 14px;
+
+      --max: 1100px;
     }
 
     *{ box-sizing:border-box; }
@@ -37,14 +44,14 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
       background:
-        radial-gradient(1000px 700px at 15% 10%, rgba(168,122,75,.20), transparent 60%),
-        radial-gradient(900px 650px at 90% 8%, rgba(107,102,232,.18), transparent 55%),
-        radial-gradient(900px 650px at 70% 85%, rgba(192,75,106,.14), transparent 60%),
-        linear-gradient(135deg, var(--bg-0), var(--bg-1));
+        radial-gradient(1100px 760px at 14% 10%, rgba(168,122,75,.20), transparent 62%),
+        radial-gradient(1000px 720px at 90% 8%, rgba(107,102,232,.18), transparent 58%),
+        radial-gradient(900px 650px at 70% 85%, rgba(192,75,106,.14), transparent 62%),
+        linear-gradient(135deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
 
-    /* лёгкая текстура */
+    /* тонкая зернистость */
     .grain{
       position:fixed; inset:0;
       pointer-events:none;
@@ -53,85 +60,128 @@
       mix-blend-mode:multiply;
     }
 
-    .wrap{ max-width:1080px; margin:0 auto; padding:28px 18px 60px; }
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 26px 16px 64px;
+    }
 
+    /* РАМКА / ПРЕЗЕНТАЦИЯ */
+    .frame{
+      position:relative;
+      border-radius: calc(var(--r-xl) + 8px);
+      padding: 12px;
+      background: linear-gradient(135deg,
+        rgba(168,122,75,.35),
+        rgba(255,255,255,.22),
+        rgba(107,102,232,.28),
+        rgba(192,75,106,.22)
+      );
+      box-shadow: var(--shadow2);
+    }
+    .frame::before{
+      content:"";
+      position:absolute;
+      inset: 1px;
+      border-radius: calc(var(--r-xl) + 7px);
+      background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.18));
+      pointer-events:none;
+    }
+    .paper{
+      position:relative;
+      border-radius: var(--r-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.55));
+      border: 1px solid rgba(255,255,255,.78);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+    }
+    .paper::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(700px 260px at 18% 0%, rgba(168,122,75,.18), transparent 62%),
+        radial-gradient(620px 260px at 100% 12%, rgba(107,102,232,.16), transparent 62%);
+      opacity:.95;
+      pointer-events:none;
+    }
+
+    /* Верхние пилюли */
     .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px; margin-bottom:18px; flex-wrap:wrap;
+      position:relative;
+      z-index:2;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 16px 18px 0;
+      flex-wrap:wrap;
     }
 
     .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 12px; border-radius:999px;
-      background: rgba(255,255,255,.55);
-      border:1px solid rgba(255,255,255,.7);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(31,41,55,.08);
-      font-size: 13px; color: var(--muted);
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.62);
+      border:1px solid rgba(255,255,255,.78);
+      box-shadow: 0 10px 24px rgba(31,41,55,.08);
+      font-size: 13px;
+      color: var(--muted);
       letter-spacing:.2px;
+      user-select:none;
     }
 
     .dot{
       width:8px; height:8px; border-radius:50%;
-      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+      background: linear-gradient(135deg, var(--a2), var(--a1));
       box-shadow: 0 0 0 4px rgba(107,102,232,.10);
+      flex: 0 0 auto;
     }
 
-    /* HERO: заголовок + фото сверху справа */
+    /* HERO */
     .hero{
       position:relative;
-      border-radius: var(--radius-xl);
-      padding: 26px;
-      background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.40));
-      border:1px solid rgba(255,255,255,.70);
-      backdrop-filter: blur(12px);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .hero::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(700px 240px at 20% 0%, rgba(168,122,75,.22), transparent 60%),
-        radial-gradient(600px 240px at 100% 10%, rgba(107,102,232,.20), transparent 60%);
-      z-index:0;
+      z-index:2;
+      padding: 18px 18px 18px;
     }
 
     .hero-grid{
-      position:relative;
-      z-index:1;
       display:grid;
-      grid-template-columns: 1.4fr .6fr;
-      gap: 22px;
+      grid-template-columns: 1.45fr .55fr;
+      gap: 18px;
       align-items:start;
     }
 
     .headline{
       margin:0;
-      font-size: clamp(30px, 5vw, 54px);
-      line-height:1.06;
-      letter-spacing:-.8px;
-      font-weight: 850;
-
-      /* градиентный заголовок с прозрачностью текста */
-      background: linear-gradient(135deg, rgba(31,41,55,.98), rgba(31,41,55,.65) 35%, rgba(168,122,75,.95) 70%, rgba(107,102,232,.92));
-      -webkit-background-clip: text;
+      font-size: clamp(32px, 5.2vw, 56px);
+      line-height:1.03;
+      letter-spacing:-1px;
+      font-weight: 900;
+      background: linear-gradient(135deg,
+        rgba(31,41,55,.98),
+        rgba(31,41,55,.66) 34%,
+        rgba(168,122,75,.96) 70%,
+        rgba(107,102,232,.92)
+      );
+      -webkit-background-clip:text;
       background-clip:text;
-      color: transparent;
-      text-shadow: 0 12px 30px rgba(31,41,55,.10);
+      color:transparent;
+      text-shadow: 0 14px 34px rgba(31,41,55,.10);
     }
 
     .subhead{
       margin: 12px 0 0;
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--muted);
-      max-width: 62ch;
+      font-size: 15.5px;
+      line-height: 1.65;
+      color: rgba(31,41,55,.72);
+      max-width: 64ch;
     }
 
     .meta{
-      margin-top: 16px;
+      margin-top: 14px;
       display:flex;
       flex-wrap:wrap;
       gap:10px;
@@ -143,77 +193,89 @@
       gap:8px;
       padding: 10px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.58);
-      border: 1px solid rgba(255,255,255,.8);
+      background: rgba(255,255,255,.68);
+      border: 1px solid rgba(255,255,255,.86);
       color: rgba(31,41,55,.82);
       font-size: 13px;
-      box-shadow: 0 10px 24px rgba(31,41,55,.06);
+      box-shadow: 0 10px 22px rgba(31,41,55,.06);
+      user-select:none;
+      white-space:nowrap;
     }
 
     .badge svg{ opacity:.75; }
 
+    /* Фото */
     .photo{
       justify-self:end;
-      width: 168px;
-      height: 168px;
-      border-radius: 26px;
+      width: 176px;
+      height: 176px;
+      border-radius: 28px;
       overflow:hidden;
-      border: 1px solid rgba(255,255,255,.9);
-      box-shadow: 0 18px 45px rgba(31,41,55,.18);
-      transform: translateY(2px);
-      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(255,255,255,.92);
+      box-shadow: 0 20px 55px rgba(31,41,55,.18);
+      background: rgba(255,255,255,.62);
+      position:relative;
     }
-
+    .photo::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(168,122,75,.35), rgba(107,102,232,.28), rgba(192,75,106,.22));
+      opacity:.6;
+      pointer-events:none;
+    }
     .photo img{
+      position:relative;
       width:100%;
       height:100%;
       object-fit: cover;
       object-position: center 20%;
       display:block;
-      filter: saturate(1.02) contrast(1.02);
+      filter: saturate(1.03) contrast(1.03);
     }
 
     .accent-line{
-      margin-top: 20px;
+      margin-top: 18px;
       height: 1px;
       background: linear-gradient(90deg, rgba(168,122,75,.0), rgba(168,122,75,.55), rgba(107,102,232,.50), rgba(192,75,106,.0));
       opacity:.9;
     }
 
-    /* Основной layout */
+    /* Основной контент */
+    .content{
+      position:relative;
+      z-index:2;
+      padding: 0 18px 18px;
+    }
+
     .grid{
       display:grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 18px;
-      margin-top: 18px;
+      grid-template-columns: 1.28fr .72fr;
+      gap: 16px;
+      margin-top: 16px;
     }
 
     .card{
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.78);
-      border-radius: var(--radius-xl);
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.80);
+      border-radius: var(--r-xl);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
       padding: 18px;
-    }
-
-    .card h2{
-      margin: 0 0 12px;
-      font-size: 16px;
-      letter-spacing:.2px;
     }
 
     .kicker{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 10px;
+      gap:10px;
       margin-bottom: 10px;
     }
 
-    .kicker span{
-      font-size: 12px;
-      color: var(--muted);
+    .card h2{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing:.2px;
     }
 
     .chip{
@@ -222,29 +284,30 @@
       gap:8px;
       padding: 7px 10px;
       border-radius: 999px;
-      border:1px solid rgba(255,255,255,.9);
-      background: rgba(255,255,255,.58);
+      border:1px solid rgba(255,255,255,.90);
+      background: rgba(255,255,255,.65);
       color: rgba(31,41,55,.78);
       font-size: 12px;
+      white-space:nowrap;
+      user-select:none;
     }
 
     .timeline{ display:grid; gap: 12px; }
 
     .job{
       position:relative;
-      border-radius: var(--radius-lg);
-      padding: 14px;
-      background: rgba(255,255,255,.55);
-      border: 1px solid rgba(255,255,255,.80);
+      border-radius: var(--r-lg);
+      padding: 14px 14px 14px 14px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(255,255,255,.86);
       overflow:hidden;
     }
 
     .job::before{
       content:"";
-      position:absolute;
-      left:0; top:0; bottom:0;
+      position:absolute; left:0; top:0; bottom:0;
       width: 4px;
-      background: linear-gradient(180deg, var(--accent-0), var(--accent-1), var(--accent-2));
+      background: linear-gradient(180deg, var(--a0), var(--a1), var(--a2));
       opacity:.9;
     }
 
@@ -257,7 +320,7 @@
     }
 
     .job-title{
-      font-weight: 800;
+      font-weight: 900;
       font-size: 14px;
       letter-spacing:.2px;
     }
@@ -272,13 +335,12 @@
       margin-left: 22px;
       padding: 0;
       color: rgba(31,41,55,.82);
-      line-height: 1.55;
-      font-size: 13px;
+      line-height: 1.6;
+      font-size: 13.2px;
     }
-
     .job li{ margin: 6px 0; }
 
-    /* Кейсы — выделенные блоки */
+    /* Кейсы */
     .cases{
       display:grid;
       gap: 12px;
@@ -286,41 +348,38 @@
     }
 
     .case{
-      border-radius: var(--radius-lg);
+      border-radius: var(--r-lg);
       padding: 14px;
-      border: 1px solid rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.88);
       background:
-        linear-gradient(135deg, rgba(107,102,232,.10), rgba(255,255,255,.55) 45%, rgba(168,122,75,.12));
+        linear-gradient(135deg, rgba(107,102,232,.11), rgba(255,255,255,.60) 45%, rgba(168,122,75,.12));
       position:relative;
       overflow:hidden;
     }
-
     .case::after{
       content:"";
       position:absolute;
       right:-60px; top:-60px;
       width:160px; height:160px;
       border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(192,75,106,.20), transparent 65%);
+      background: radial-gradient(circle at 30% 30%, rgba(192,75,106,.22), transparent 65%);
       filter: blur(1px);
     }
-
     .case h3{
       margin: 0 0 8px;
       font-size: 14px;
       letter-spacing:.2px;
     }
-
     .case p{
       margin:0;
       color: rgba(31,41,55,.78);
-      line-height:1.55;
-      font-size: 13px;
+      line-height:1.6;
+      font-size: 13.2px;
       position:relative;
       z-index:1;
     }
 
-    /* Карточки навыков с hover-анимацией */
+    /* Навыки */
     .skills-grid{
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -329,10 +388,10 @@
     }
 
     .skill-card{
-      border-radius: var(--radius-lg);
+      border-radius: var(--r-lg);
       padding: 14px;
-      background: rgba(255,255,255,.56);
-      border: 1px solid rgba(255,255,255,.82);
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(255,255,255,.88);
       box-shadow: 0 12px 28px rgba(31,41,55,.08);
       transform: translateY(0);
       transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
@@ -343,23 +402,24 @@
     .skill-card::before{
       content:"";
       position:absolute; inset:-2px;
-      background: radial-gradient(600px 200px at 10% 0%, rgba(168,122,75,.18), transparent 55%),
-                  radial-gradient(600px 200px at 100% 0%, rgba(107,102,232,.16), transparent 60%);
+      background:
+        radial-gradient(600px 220px at 10% 0%, rgba(168,122,75,.18), transparent 55%),
+        radial-gradient(620px 240px at 100% 0%, rgba(107,102,232,.16), transparent 60%);
       opacity:0;
       transition: opacity .22s ease;
     }
 
     .skill-card:hover{
       transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(255,255,255,.95);
+      box-shadow: 0 20px 55px rgba(31,41,55,.14);
+      border-color: rgba(255,255,255,.98);
     }
     .skill-card:hover::before{ opacity:1; }
 
     .skill-card h4{
       margin: 0 0 6px;
       font-size: 13px;
-      font-weight: 850;
+      font-weight: 900;
       letter-spacing:.2px;
       position:relative;
       z-index:1;
@@ -367,14 +427,14 @@
 
     .skill-card p{
       margin:0;
-      font-size: 12.5px;
-      line-height: 1.5;
+      font-size: 12.8px;
+      line-height: 1.55;
       color: rgba(31,41,55,.76);
       position:relative;
       z-index:1;
     }
 
-    /* Сетка инструментов в виде тегов */
+    /* Теги */
     .tags{
       display:flex;
       flex-wrap:wrap;
@@ -385,285 +445,8 @@
     .tag{
       padding: 9px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.58);
-      border: 1px solid rgba(255,255,255,.86);
+      background: rgba(255,255,255,.66);
+      border: 1px solid rgba(255,255,255,.90);
       font-size: 12px;
-      color: rgba(31,41,55,.78);
-      transition: transform .18s ease, box-shadow .18s ease;
-      box-shadow: 0 10px 22px rgba(31,41,55,.06);
-      user-select:none;
-    }
-
-    .tag:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 16px 34px rgba(31,41,55,.10);
-    }
-
-    .two-col{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .small{
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: rgba(31,41,55,.78);
-      margin: 8px 0 0;
-    }
-
-    .footer-note{
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,.65);
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.55;
-    }
-
-    /* Адаптив */
-    @media (max-width: 920px){
-      .grid{ grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 720px){
-      .hero{ padding: 18px; }
-      .hero-grid{
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-      .photo{
-        justify-self: start;
-        width: 132px;
-        height: 132px;
-        border-radius: 20px;
-      }
-      .skills-grid{ grid-template-columns: 1fr; }
-      .two-col{ grid-template-columns: 1fr; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      *{ transition:none !important; scroll-behavior:auto !important; }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <div class="wrap">
-    <div class="topbar">
-      <div class="pill"><span class="dot"></span> Москва • Бухгалтерия • International</div>
-      <div class="pill">ОСНО • ВЭД • 1С 8.3 • SAP</div>
-    </div>
-
-    <section class="hero" aria-label="Шапка резюме">
-      <div class="hero-grid">
-        <!-- Заголовок слева -->
-        <div>
-          <h1 class="headline">Резюме<br/>Главный бухгалтер</h1>
-          <p class="subhead">
-            Практический опыт ведения бухгалтерского и налогового учета на ОСНО, включая международные операции.
-            Эксперт в 1С 8.3 (Бухгалтерия, ЗУП), опыт работы с SAP. Полный цикл отчетности (ИФНС, ПФР, ФСС, Росстат).
-            Английский — C2.
-          </p>
-
-          <div class="meta">
-            <div class="badge" title="Опыт">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M4 7h16v14H4V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                <path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              20+ лет опыта
-            </div>
-            <div class="badge">Русский • Английский C2 • Испанский A1</div>
-            <div class="badge">Отчетность • Payroll • Автоматизация</div>
-          </div>
-
-          <div class="accent-line" aria-hidden="true"></div>
-        </div>
-
-        <!-- Фото сверху справа -->
-        <div class="photo" aria-label="Фото кандидата">
-          <!-- Новое имя файла фото: MyPhoto.JPG -->
-          <img src="./MyPhoto.JPG" alt="Фото" />
-        </div>
-      </div>
-    </section>
-
-    <section class="grid" aria-label="Основные блоки">
-      <!-- Левый столбец -->
-      <div class="card">
-        <div class="kicker">
-          <h2>Опыт работы</h2>
-          <span class="chip">основные роли</span>
-        </div>
-
-        <div class="timeline">
-          <article class="job">
-            <div class="job-head">
-              <div class="job-title">Главный бухгалтер — IT company</div>
-              <div class="job-meta">Москва • Апрель 2018 — Декабрь 2023 (5 лет 9 месяцев)</div>
-            </div>
-            <ul>
-              <li>Самостоятельное ведение бухгалтерского и налогового учета на ОСНО: от первички до баланса и деклараций.</li>
-              <li>Расчеты с контрагентами: контроль ДЗ/КЗ, сверки, договоры, реализация, валютный контроль.</li>
-              <li>Учет ОС/НМА/ТМЦ, инвентаризации; отчетность (БУ, НУ, Росстат, фонды), подготовка к проверкам.</li>
-              <li>Payroll: начисление заработной платы, налогов и взносов; 6-НДФЛ, РСВ, СЗВ, 4-ФСС.</li>
-              <li>Автоматизация: синхронизация 1С:ЗУП и 1С:Бухгалтерия, переход с 1С 7 на 1С 8, Excel и ЭДО.</li>
-              <li>Управленческие отчеты для головного офиса (PL, Balance, Annual Supplementary Disclosure и др.).</li>
-            </ul>
-
-            <div class="cases" aria-label="Кейсы">
-              <div class="case">
-                <h3>Кейс: работа без штрафов</h3>
-                <p>За 5 лет обеспечила стабильную работу участка без штрафов и критических замечаний по отчетности и срокам.</p>
-              </div>
-              <div class="case">
-                <h3>Кейс: урегулирование споров</h3>
-                <p>Успешный опыт возврата средств компании в результате урегулирования споров с ФНС и ФСС.</p>
-              </div>
-            </div>
-          </article>
-
-          <article class="job">
-            <div class="job-head">
-              <div class="job-title">Административный директор — Legal company</div>
-              <div class="job-meta">Москва • Октябрь 2017 — Декабрь 2017 (3 месяца)</div>
-            </div>
-            <ul>
-              <li>Подготовка данных для расчета ФОТ и кадровый документооборот: табели, первичные данные для аутсорсинга, договоры.</li>
-              <li>Контроль служебных авансов сотрудников: оформление и своевременный возврат.</li>
-              <li>Поддержка клиентских и финансовых процессов: договоры, биллинг, документы для валютного контроля.</li>
-              <li>Оптимизация процессов: внедрение учета рабочего времени и участие в смене телеком-провайдера.</li>
-            </ul>
-          </article>
-
-          <article class="job">
-            <div class="job-head">
-              <div class="job-title">Бухгалтер — Pet Food company</div>
-              <div class="job-meta">Москва • Май 2017 — Октябрь 2017 (6 месяцев)</div>
-            </div>
-            <ul>
-              <li>Контроль ДЗ/КЗ: ежедневный мониторинг расчетов, сверка банковских счетов, межофисные сверки.</li>
-              <li>Регистрация счетов поставщиков (в т.ч. ГТД) в SAP, контроль сроков оплаты.</li>
-              <li>Учет операционных расходов и авансовых отчетов; соответствие НК РФ и внутренним политикам.</li>
-              <li>Закрытие месяца и отчетность: проводки, документация, отчеты по инвентаризации.</li>
-              <li>Валютный контроль: прогнозы межофисных платежей, поручения, отчетность.</li>
-              <li>Подготовка к внутреннему аудиту в рамках SOX.</li>
-            </ul>
-          </article>
-
-          <article class="job">
-            <div class="job-head">
-              <div class="job-title">Старший бухгалтер по реализации / Кредитный контроллер — Legal company</div>
-              <div class="job-meta">Москва • Сентябрь 1997 — Июнь 2016 (18 лет 10 месяцев)</div>
-            </div>
-            <ul>
-              <li>Контроль участка реализации и дебиторской задолженности: от документации до поступления выручки.</li>
-              <li>Международные расчеты и валютный контроль: координация платежей с европейскими банками и зарубежными офисами.</li>
-              <li>Compliance: оформление валютных операций и учет в соответствии с требованиями РФ и международных стандартов.</li>
-              <li>Документы на английском: счета, акты, финансовые отчеты и договоры; ежедневная коммуникация.</li>
-              <li>Кросс-граничные проекты; секондмент в Стокгольме (2011).</li>
-              <li>Книга продаж, закрытие периода, управленческая отчетность и анализ финансовых потоков.</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-
-      <!-- Правый столбец -->
-      <aside class="card">
-        <div class="kicker">
-          <h2>Ключевые компетенции</h2>
-          <span class="chip">акцент</span>
-        </div>
-
-        <div class="skills-grid">
-          <div class="skill-card">
-            <h4>ОСНО • БУ/НУ • Полный цикл</h4>
-            <p>От первички до баланса и деклараций. Подготовка к проверкам (ФНС/аудит).</p>
-          </div>
-          <div class="skill-card">
-            <h4>Payroll и отчетность</h4>
-            <p>Начисление зарплаты, налогов и взносов; 6-НДФЛ, РСВ, СЗВ, 4-ФСС.</p>
-          </div>
-          <div class="skill-card">
-            <h4>ВЭД и валютный контроль</h4>
-            <p>Международные расчеты, документы и учет валютных операций.</p>
-          </div>
-          <div class="skill-card">
-            <h4>Автоматизация</h4>
-            <p>1С 8.3 (Бухгалтерия/ЗУП), синхронизации, переходы версий, ЭДО, Excel.</p>
-          </div>
-        </div>
-
-        <h2 style="margin-top:18px;">Инструменты и системы</h2>
-        <div class="tags" aria-label="Теги инструментов">
-          <span class="tag">1С:Бухгалтерия 8</span>
-          <span class="tag">1С:ЗУП</span>
-          <span class="tag">SAP</span>
-          <span class="tag">ЭДО</span>
-          <span class="tag">Excel</span>
-          <span class="tag">Консультант+</span>
-          <span class="tag">Валютный контроль</span>
-          <span class="tag">Росстат</span>
-          <span class="tag">Налоговая отчетность</span>
-        </div>
-
-        <h2 style="margin-top:18px;">Образование</h2>
-        <div class="two-col">
-          <div class="job" style="margin:0;">
-            <div class="job-head">
-              <div class="job-title">ВШЭ (2003)</div>
-              <div class="job-meta">Бухучет и аудит</div>
-            </div>
-            <p class="small">Диплом об окончании.</p>
-          </div>
-          <div class="job" style="margin:0;">
-            <div class="job-head">
-              <div class="job-title">МГЛУ (1996)</div>
-              <div class="job-meta">Лингвист</div>
-            </div>
-            <p class="small">Диплом с отличием.</p>
-          </div>
-        </div>
-
-        <h2 style="margin-top:18px;">Повышение квалификации</h2>
-        <div class="timeline">
-          <div class="job" style="margin:0;">
-            <div class="job-head">
-              <div class="job-title">Налоговый консультант (2022)</div>
-              <div class="job-meta">Палата НК РФ • «ЭЛКОД»</div>
-            </div>
-          </div>
-          <div class="job" style="margin:0;">
-            <div class="job-head">
-              <div class="job-title">Профессиональный бухгалтер (2021)</div>
-              <div class="job-meta">ИПБ России • «ЭЛКОД»</div>
-            </div>
-          </div>
-          <div class="job" style="margin:0;">
-            <div class="job-head">
-              <div class="job-title">ACCA Papers F1–F4 (2019)</div>
-              <div class="job-meta">exams passed</div>
-            </div>
-          </div>
-        </div>
-
-        <h2 style="margin-top:18px;">Дополнительно</h2>
-        <p class="small">
-          <strong>Вождение:</strong> собственный автомобиль, права категории B.<br/>
-          <strong>Рекомендации:</strong> Mikael Bott (Compliance), Olga Ivanova (General Director), Stefan Hills (CEO).
-        </p>
-
-        <div class="footer-note">
-          В работе ценю точность и результат. Умею вести несколько направлений параллельно и разъяснять сложные вопросы коллегам.
-        </div>
-      </aside>
-    </section>
-  </div>
-</body>
-</html>
+      color: rgba(31
 ```
